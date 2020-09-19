@@ -47,7 +47,7 @@ Now that `staircase()` is being called, let's make it do something. Fill out the
 
 <img src="figures/staircase.png" height="300">
 
-_Hint: you might use the `id` of the group containing the first bar chart to make it easy to select and iterate through its children._
+_Hint: you will probably want to add an `id` to the group containing the first bar chart to make it easy to select and iterate through its children._
 
 ## Part III: Reshaping Things with D3
 
@@ -59,7 +59,7 @@ The bulk of this assignment is to adjust the existing SVG elements based on the 
 
 We have also provided examples of D3's line and area generator functions; when called with a list of JavaScript objects with a `cases` parameter, they each produce a `path` string.
 
-_Hint: We provide you `id`s for some elements to make it easier for you to select and attach `.data()`. You can also add `id`s to other elements as long as you feel necessary._
+_Hint: while not strictly necessary, adding `id`s to each chart will make them much easier to select and attach `.data()`!_
 
 When you are finished implementing this section of the code, changing the dataset `select` menu should reshape all of the plots to fit whichever dataset was picked.
 
@@ -78,6 +78,8 @@ We focus on interactivity in this class; you will usually implement interactivit
 First, make any bar in either bar chart change color when the mouse hovers over it **using JavaScript**. We could accomplish this with a hover effect using CSS. However, this has some limitations, e.g. it can't be used to trigger synchronized highlighting in other views.
 
 Your second interactive component will be to use D3 to listen for clicks on each scatterplot point - when clicked, the browser should log the x and y coordinates of that point to the console.
+
+Note that, because the events are attached in the `update()` function, clicking points won't work unless you first switch datasets! You should fix this by calling `changeData()` when the document loads.
 
 **Extra credit 1:** instead of just dumping the coordinates to the console on clicks, display the coordinates in a tooltip when the mouse hovers over the points. We recommend that you use the [SVG title element](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/title) for that.
 

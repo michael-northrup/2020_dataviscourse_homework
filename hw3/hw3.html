@@ -78,26 +78,28 @@
         grid-template-columns: 1fr 1fr;
       }
     </style>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="script.js"></script>
   </head>
 
   <body>
     <h3>CS-5630 / CS-6630 Homework 3</h3>
     <address>
-      <span>Your Name</span>
-      <span>Your Email</span>
-      <span>Your UID</span>
+      <span>Michael Northrup</span>
+      <span>u0992000@utah.edu</span>
+      <span>u0992000</span>
     </address>
     <br />
     <hr />
     <br />
 
     <span>
-      <button>Staircase</button>
+      <button onclick="staircase()">Staircase</button>
     </span>
 
     <span>
       <label>Dataset:</label>
-      <select id="dataset">
+      <select id="dataset" onchange="changeData()">
         <option value="covid_us">The US</option>
         <option selected value="covid_utah">Utah</option>
         <option value="covid_ca">California</option>
@@ -105,7 +107,7 @@
       </select>
     </span>
 
-    <span> <input type="checkbox" id="random" /> Random Subset </span>
+    <span> <input type="checkbox" id="random" onclick="changeData()"/> Random Subset </span>
 
     <br />
 
@@ -145,11 +147,11 @@
         <svg  id="line-chart-svg" width="600" height="320">
           <g id="aLineChart-axis"></g>
           <g class="line-chart line-chart-x" transform="translate(50,15)">
-            <path id="aLineChart" d=""/>
+            <path id="aLineChart"/>
           </g>
           <g id="bLineChart-axis"></g>
           <g class="line-chart line-chart-y" transform="translate(50,15)">
-            <path id="bLineChart" d=""/>
+            <path id="bLineChart"/>
           </g>
         </svg>
       </div>
@@ -161,13 +163,13 @@
         <svg class="area-chart" width="300" height="300">
           <g id="aAreaChart-axis"></g>
           <g class="area-chart-x" transform="translate(295,0) rotate(90)">
-            <path id="aAreaChart" d=""/>
+            <path id="aAreaChart"/>
           </g>
         </svg>
         <svg class="area-chart " width="300" height="300">
           <g id="bAreaChart-axis"></g>
           <g class="area-chart-y" transform="translate(5, 0) rotate(90) scale(1,-1)">
-            <path id="bAreaChart" d=""/>
+            <path id="bAreaChart"/>
           </g>
         </svg>
       </div>

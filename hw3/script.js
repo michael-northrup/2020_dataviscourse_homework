@@ -1,11 +1,24 @@
+window.onload = function() {
+  changeData();
+};
+
 /**
  * Makes the first bar chart appear as a staircase.
  *
  * Note: use only the DOM API, not D3!
  */
 function staircase() {
-  // ****** TODO: PART II ******
-
+  barchart = document.getElementById('aBarChart')
+  for (let bar of barchart.children) {
+    for (let bar2 of barchart.children) {
+      let bar2Width = bar2.getAttribute('width')
+      if (+bar2Width > +bar.getAttribute('width')) {
+        let temp = bar.getAttribute('width')
+        bar.setAttribute('width', bar2Width);
+        bar2.setAttribute('width',temp);
+      }
+    }
+  }
 }
 
 /**
@@ -64,32 +77,119 @@ function update(data) {
   d3.select("#bLineChart-axis").attr("transform", "translate(550,15)").call(bAxis_line);
   d3.select("#bLineChart-axis").append("text").text("New Deaths").attr("transform", "translate(-50, -3)")
 
-  // ****** TODO: PART III (you will also edit in PART V) ******
+  let aBarChart = d3.select('#aBarChart')
+      .selectAll('rect')
+      .data(data);
 
-  // TODO: Select and update the 'a' bar chart bars
+  function setHovered() {
+    d3.select(this)
+        .classed("hovered", true);
+  }
 
-  // TODO: Select and update the 'b' bar chart bars
+  function unsetHovered() {
+    d3.select(this)
+        .classed("hovered", false);
+  }
 
-  // TODO: Select and update the 'a' line chart path using this line generator
+  aBarChart
+      .join('rect')
+      .attr("y", (d, i) => i * 14)
+      .attr("width", d=>aScale(d.cases))
+      .attr('height', 12)
+      .attr("transform", "scale(-1,1)")
+      .on("mouseover", setHovered)
+      .on("mouseout", unsetHovered)
+
+  aBarChart.exit().remove();
+
+  let bBarChart = d3.select('#bBarChart')
+      .selectAll('rect')
+      .data(data);
+
+  bBarChart
+      .join('rect')
+      .attr("y", (d, i) => i * 14)
+      .attr("width", d=>bScale(d.deaths))
+      .attr('height', 12)
+      .on("mouseover", setHovered)
+      .on("mouseout", unsetHovered);
+
+  bBarChart.exit().remove();
+
   let aLineGenerator = d3
     .line()
     .x((d, i) => iScale_line(i))
     .y(d => aScale(d.cases));
 
-  // TODO: Select and update the 'b' line chart path (create your own generator)
+  let aLineChart = d3.select('#aLineChart')
+      .data(data);
+  aLineChart
+      .join("path")
+      .attr("d", aLineGenerator(data));
+  aLineChart.exit().remove();
 
-  // TODO: Select and update the 'a' area chart path using this area generator
+  let bLineGenerator = d3
+      .line()
+      .x((d, i) => iScale_line(i))
+      .y(d => bScale(d.deaths));
+
+  let bLineChart = d3.select('#bLineChart')
+      .data(data);
+
+  bLineChart
+      .join("path")
+      .attr("d", bLineGenerator(data));
+  bLineChart.exit().remove();
+
   let aAreaGenerator = d3
     .area()
     .x((d, i) => iScale_area(i))
     .y0(0)
     .y1(d => aScale(d.cases));
 
-  // TODO: Select and update the 'b' area chart path (create your own generator)
+  let aAreaChart = d3.select('#aAreaChart')
+      .data(data);
 
-  // TODO: Select and update the scatterplot points
-  
-  // ****** TODO: PART IV ******
+  aAreaChart
+      .join("path")
+      .attr("d", aAreaGenerator(data));
+  aAreaChart.exit().remove();
+
+  let bAreaGenerator = d3
+      .area()
+      .x((d, i) => iScale_area(i))
+      .y0(0)
+      .y1(d => bScale(d.deaths));
+
+  let bAreaChart = d3.select('#bAreaChart')
+      .data(data);
+
+  bAreaChart
+      .join("path")
+      .attr("d", bAreaGenerator(data));
+  bAreaChart.exit().remove();
+
+  let scatterXAxis_line = d3.axisBottom(aScale).ticks(5);
+  d3.select("#x-axis").attr("transform", "translate(0,240)").call(scatterXAxis_line)
+
+  let scatterYAxis_line = d3.axisLeft(bScale).ticks(5);
+  d3.select("#y-axis").attr("transform", "translate(0,0)").call(scatterYAxis_line);
+  let scatterplot = d3.select('#scatterplot')
+      .selectAll(".dot")
+      .data(data);
+  function logValues() {
+    console.log("x: " + this.getAttribute("cx") + "\n"
+        + "y: " + this.getAttribute("cy"))
+  }
+  scatterplot
+      .join("circle")
+      .classed("dot", true)
+      .attr("cx", data=>aScale(data.cases))
+      .attr("cy", data=>bScale(data.deaths))
+      .attr("r", 3.5)
+      .on("click",logValues)
+      .on("mouseover", setHovered)
+      .on("mouseout", unsetHovered)
 }
 
 /**
